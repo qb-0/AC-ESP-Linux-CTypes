@@ -42,8 +42,8 @@ def main():
         max_players = mem.read_mem(base + helper.Pointer.max_players, c_int32())
 
         begin_drawing()
-        for i in range(max_players):
-            ent_addr = mem.read_mem(entity_list + i * 8, c_int64())
+        ent_array = mem.read_array(entity_list, c_int64, max_players * 8)
+        for ent_addr in ent_array:
             if ent_addr != 0 and ent_addr != local_player_addr:
                 try:
                     ent = Entity()
