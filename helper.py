@@ -54,13 +54,16 @@ def world_to_screen(matrix, pos):
 
     clip.z = pos.x * matrix[3] + pos.y * matrix[7] + pos.z * matrix[11] + matrix[15]
     if clip.z < 0.2:
-        raise IOError("WTS")
+        raise IOError("WTS: Out of bounds")
     clip.x = pos.x * matrix[0] + pos.y * matrix[4] + pos.z * matrix[8] + matrix[12]
     clip.y = pos.x * matrix[1] + pos.y * matrix[5] + pos.z * matrix[9] + matrix[13]
     ndc.x = clip.x / clip.z
     ndc.y = clip.y / clip.z
-    result.x = int((get_screen_width() / 2 * ndc.x) + (ndc.x + get_screen_width() / 2))
-    result.y = int(-(get_screen_height() / 2 * ndc.y) + (ndc.y + get_screen_height() / 2))
+    try:
+        result.x = int((get_screen_width() / 2 * ndc.x) + (ndc.x + get_screen_width() / 2))
+        result.y = int(-(get_screen_height() / 2 * ndc.y) + (ndc.y + get_screen_height() / 2))
+    except Exception as e:
+        raise IOError(f"WTS: {e}")
     return result
 
 
